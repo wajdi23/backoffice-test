@@ -89,6 +89,47 @@ export const userSchema = {
     },
   },
 
+  getUserById: {
+    schema: {
+      description: "Get a user by ID",
+      tags: ["user"],
+      summary: "Users endpoints",
+      security: [{ bearerAuth: [] }],
+
+      params: {
+        type: "object",
+        required: ["id"],
+        properties: {
+          id: { type: "number" },
+        },
+      },
+
+      response: {
+        200: {
+          description: "Successful response",
+          type: "object",
+          properties: {
+            id: { type: "number" },
+            firstName: { type: "string" },
+            lastName: { type: "string" },
+            email: { type: "string" },
+            dateOfBirth: { type: "string", format: "date-time" },
+            createdAt: { type: "string", format: "date-time" },
+            updatedAt: { type: "string", format: "date-time" },
+          },
+        },
+
+        404: {
+          description: "user not found",
+          type: "object",
+          properties: {
+            message: { type: "string" },
+          },
+        },
+      },
+    },
+  },
+
   updateUser: {
     schema: {
       description: "Update a user",

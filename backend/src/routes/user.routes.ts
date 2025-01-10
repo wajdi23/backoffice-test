@@ -8,6 +8,7 @@ export const userRoutes = async (fastify: FastifyInstance) => {
 
   fastify.post("", userSchema.createUser, userController.create);
   fastify.get("", userSchema.getAllUsers, userController.getAll);
+  fastify.get("/:id", userSchema.getUserById, userController.getUserById);
   fastify.put("/:id", userSchema.updateUser, userController.updateUser);
   fastify.delete("/:id", userSchema.deleteUser, userController.deleteUser);
 };

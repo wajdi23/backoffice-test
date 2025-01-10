@@ -6,6 +6,7 @@ interface DeleteConfirmDialogProps {
   onConfirm: () => void;
   title?: string;
   message?: string;
+  hideConfirm?: boolean;
 }
 
 const DeleteConfirmDialog = ({
@@ -14,6 +15,7 @@ const DeleteConfirmDialog = ({
   onConfirm,
   title,
   message,
+  hideConfirm = false,
 }: DeleteConfirmDialogProps) => {
   return (
     <ConfirmDialog
@@ -22,10 +24,11 @@ const DeleteConfirmDialog = ({
       message={message}
       header={title}
       icon="pi pi-exclamation-triangle"
-      accept={onConfirm}
+      accept={hideConfirm ? undefined : onConfirm}
       reject={onHide}
       acceptLabel="Yes, delete"
-      rejectLabel="Cancel"
+      rejectLabel={hideConfirm ? "Close" : "Cancel"}
+      acceptClassName={hideConfirm ? "hidden" : undefined}
     />
   );
 };

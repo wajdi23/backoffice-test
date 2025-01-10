@@ -47,6 +47,28 @@ export class UserController {
     } catch (error) {}
   };
 
+  public getUserById = async (
+    req: FastifyRequest<{ Params: { id: number } }>,
+    res: FastifyReply
+  ) => {
+    try {
+      const id = req.params.id;
+      const user = await this.userService.findById(id);
+
+      if (!user) {
+        return res.code(404).send({
+          message: `User with id ${id} not found!`,
+        });
+      }
+      return res.code(200).send(user);
+    } catch (error) {
+      return res.code(500).send({
+        message: "Internal server error",
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  };
+
   public updateUser = async (
     req: FastifyRequest<{
       Params: { id: number };
@@ -63,7 +85,10 @@ export class UserController {
       if (!updatedUser)
         return res.code(404).send(`user with id ${id} not found !`);
 
-      return res.code(200).send(updatedUser);
+      return res.code(200).send({
+        message: `User ${id} has been updated successfully`,
+        user: updatedUser,
+      });
     } catch (error) {
       return res.code(500).send("internal server error");
     }

@@ -45,7 +45,7 @@ export class AuthService {
     email: string,
     password: string
   ) {
-    const resetLink = `http://localhost:3001/login`;
+    const loginLink = `http://localhost:3001/login`;
     const message = `Dear ${firstName} ${lastName}, good news for you, you have been added to our new App, please click the link
     below to test it. Note: you'll be able to change your password soon :)`;
 
@@ -57,7 +57,7 @@ export class AuthService {
         <p>${message}</p>
         <p>Your username: <strong>${email}</strong></p>
         <p>Your password: <strong>${password}</strong></p>
-        <a href="${resetLink}">Go</a>
+        <a href="${loginLink}">Go</a>
       `,
     };
 

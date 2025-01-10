@@ -9,14 +9,6 @@ import { InputText } from "primereact/inputtext";
 import { Message } from "primereact/message";
 import { forwardRef, useState } from "react";
 
-const userValidations: ValidationRules = {
-  firstName: { required: true },
-  lastName: { required: true },
-  email: { required: true, email: true },
-  password: { required: true, password: true },
-  dateOfBirth: { required: true, dateOfBirth: true },
-};
-
 interface UserFormProps {
   user: User | undefined;
   onSubmit: (userData: CreateUserInput, id?: number) => void;
@@ -25,6 +17,14 @@ interface UserFormProps {
 }
 const UserForm = forwardRef<HTMLFormElement, UserFormProps>(
   ({ user, onSubmit, emailError, onEmailChange }, ref) => {
+    const userValidations: ValidationRules = {
+      firstName: { required: true },
+      lastName: { required: true },
+      email: { required: true, email: true },
+      password: { required: !user },
+      dateOfBirth: { required: true, dateOfBirth: true },
+    };
+
     const [errors, setErrors] = useState<ValidationErrors>({});
     const [formData, setFormData] = useState<CreateUserInput>({
       firstName: user?.firstName || "",
@@ -50,7 +50,12 @@ const UserForm = forwardRef<HTMLFormElement, UserFormProps>(
               )
             : null,
         };
-        onSubmit(submitData, user?.id);
+        if (user) {
+          const { password, ...dataWithoutPassword } = submitData;
+          onSubmit(dataWithoutPassword, user.id);
+        } else {
+          onSubmit(submitData);
+        }
       }
     };
 
@@ -130,6 +135,10 @@ const UserForm = forwardRef<HTMLFormElement, UserFormProps>(
                 aria-describedby="username-help"
                 value={formData.password}
                 onChange={changeInputValue}
+                disabled={!!user}
+                placeholder={
+                  user ? "Password cannot be edited" : "Enter password"
+                }
               />
               {errors.password && (
                 <Message

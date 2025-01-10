@@ -24,13 +24,12 @@ export class UserService {
         },
       });
 
-      const resetToken = jwt.sign(
-        { userId: user.id },
-        process.env.JWT_SECRET as string,
-        { expiresIn: "24h" }
-      );
-
-      console.log("------", resetToken);
+      // ici, si jveux donner un token pour que le user reset son password a la premier connexion
+      // const token = jwt.sign(
+      //   { userId: user.id },
+      //   process.env.JWT_SECRET as string,
+      //   { expiresIn: "24h" }
+      // );
 
       await this.authService.welcomeUser(
         user.firstName,
@@ -78,8 +77,34 @@ export class UserService {
     };
   }
 
+  async findById(id: number) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id },
+      });
+
+      if (!user) return null;
+
+      const decryptedUser = {
+        ...user,
+        password: user.password,
+      };
+
+      return decryptedUser;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async update(id: number, newData: IUpdateUser) {
-    const user = prisma.user.update({
+    if (newData.password) {
+      const hashedPassword = await this.authService.hashPassword(
+        newData.password
+      );
+      newData.password = hashedPassword;
+    }
+
+    const user = await prisma.user.update({
       where: {
         id,
       },

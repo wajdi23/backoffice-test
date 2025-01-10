@@ -12,6 +12,7 @@ import {
   IPagination,
   PaginateParams,
 } from "../types/pagination.type";
+import { getUserIdFromToken } from "../utils/token";
 
 const defaultPagination: IPagination = {
   page: 1,
@@ -31,6 +32,7 @@ const UsersPage = () => {
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
   const { toast, success, error } = useToast();
+  const currentUserId = getUserIdFromToken();
 
   const fetchUsers = (params: PaginateParams = {}) => {
     const { page = 1, limit = 5 } = params;
@@ -62,12 +64,24 @@ const UsersPage = () => {
   };
 
   const editHandler = (user: User) => {
-    setSelectedUser(user);
-    setDialogVisible(true);
+    // setSelectedUser(user);
+    getUserDataById(user.id);
   };
 
   const deleteHandler = (user: User) => {
     setUserToDelete(user);
+  };
+
+  const getUserDataById = (id: number) => {
+    httpService
+      .get(`/users/${id}`)
+      .then((res: any) => {
+        setSelectedUser(res);
+        setDialogVisible(true);
+      })
+      .catch(() => {
+        error("An error has occured");
+      });
   };
 
   const handleConfirmDelete = () => {
@@ -127,12 +141,17 @@ const UsersPage = () => {
         visible={userToDelete !== null}
         onHide={() => setUserToDelete(null)}
         onConfirm={handleConfirmDelete}
-        title="Are you sure?"
+        title={
+          currentUserId === userToDelete?.id ? "Not allowed" : "Are you sure ?"
+        }
         message={
           userToDelete
-            ? `Are you sure you want to delete this user: ${userToDelete.firstName} ${userToDelete.lastName} ?`
+            ? currentUserId === userToDelete.id
+              ? `You cannot delete your proper account.`
+              : `Are you sure you want to delete this user? ${userToDelete.firstName} ${userToDelete.lastName} ?`
             : ""
         }
+        hideConfirm={currentUserId === userToDelete?.id}
       />
       <UserToolbar onAdd={handleAdd} />
       <UsersList
