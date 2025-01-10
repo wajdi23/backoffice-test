@@ -83,6 +83,7 @@ const UserForm = forwardRef<HTMLFormElement, UserFormProps>(
                 name="firstName"
                 value={formData.firstName}
                 onChange={changeInputValue}
+                placeholder="First Name"
               />
               {errors.firstName && (
                 <Message severity="error" text={errors.firstName} />
@@ -99,6 +100,7 @@ const UserForm = forwardRef<HTMLFormElement, UserFormProps>(
                 aria-describedby="username-help"
                 value={formData.lastName}
                 onChange={changeInputValue}
+                placeholder="Last Name"
               />
               {errors.lastName && (
                 <Message severity="error" text={errors.lastName} />
@@ -118,6 +120,7 @@ const UserForm = forwardRef<HTMLFormElement, UserFormProps>(
                 aria-describedby="username-help"
                 value={formData.email}
                 onChange={changeInputValue}
+                placeholder="Email"
               />
               {(errors.email || emailError) && (
                 <Message severity="error" text={errors.email || emailError} />
@@ -157,6 +160,7 @@ const UserForm = forwardRef<HTMLFormElement, UserFormProps>(
               <label htmlFor="dateOfBirth">Date of birth</label>
 
               <Calendar
+                placeholder="Date of birth"
                 value={formData.dateOfBirth}
                 onChange={(e) =>
                   setFormData((prev) => ({
