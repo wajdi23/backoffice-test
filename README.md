@@ -5,7 +5,7 @@
 
 ## Variables d'environnement
 
-1. Dans le fichier `.env.docker` à la racine du projet modifiez les variables suivantes :
+1. Dans le fichier `.env.docker` sous `/backend`, modifiez les variables suivantes :
 
 ```bash
 SENDGRID_API_KEY=<envoyée par mail>
