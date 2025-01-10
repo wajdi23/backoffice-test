@@ -30,7 +30,7 @@ const UserDialog: React.FC<UserDialogProps> = ({
       onHide();
     } catch (err: any) {
       if (err.status === 409) {
-        setEmailError("Cette adresse email est déjà utilisée");
+        setEmailError("Email already taken");
       }
     }
   };

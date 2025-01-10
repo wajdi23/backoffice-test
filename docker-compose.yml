@@ -26,7 +26,7 @@ services:
       - ./backend:/app
       - /app/node_modules
     env_file:
-      - .env.docker
+      - ./backend/.env.docker
     depends_on:
       - db
   db:

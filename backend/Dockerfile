@@ -13,4 +13,5 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD sh -c "sleep 10 && npx prisma migrate deploy && npx prisma generate && npm run seed && npm run dev"
+CMD ["npm", "run", "docker-start"]
+
